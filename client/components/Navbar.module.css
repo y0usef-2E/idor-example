@@ -1,0 +1,14 @@
+#navbar {
+  display: flex;
+  flex-direction: row-reverse;
+  border-bottom: 0.05rem solid;
+  border-color: rgb(211, 235, 247);
+  margin-bottom: 4rem;
+}
+.nav_item {
+  margin: 1rem;
+}
+.nav_item a {
+  text-decoration: none;
+  color: rgb(29, 78, 99);
+}
