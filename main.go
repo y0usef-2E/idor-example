@@ -7,6 +7,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/session"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -16,7 +17,7 @@ type Time time.Time
 
 type User struct {
 	gorm.Model
-	ID            uint
+	ID            uint   `json:"id"`
 	Username      string `json:"username"`
 	Password      string `json:"password"`
 	Address       string `json:"address"`
@@ -26,7 +27,7 @@ type User struct {
 }
 
 func main() {
-	store := session.New()
+	store := session.New(session.Config{Expiration: 3 * 24 * time.Hour})
 	p := &params{
 		memory:      64 * 1024,
 		iterations:  1,
@@ -43,6 +44,11 @@ func main() {
 	db.AutoMigrate(&User{})
 
 	app := fiber.New()
+	app.Use(cors.New(cors.Config{
+		AllowOrigins:     "http://localhost:3000",
+		AllowHeaders:     "",
+		AllowCredentials: true,
+	}))
 
 	// login struct:
 	type Login struct {
@@ -51,6 +57,7 @@ func main() {
 	}
 
 	app.Post("/login", func(c *fiber.Ctx) error {
+
 		// Get session from storage
 		sess, _ := store.Get(c)
 
@@ -105,7 +112,9 @@ func main() {
 	}
 	app.Get("/me", func(c *fiber.Ctx) error {
 		sess, _ := store.Get(c)
-		return c.JSON(sess.Get("userId"))
+		var user User
+		db.First(&user, "id = ?", sess.Get("userId"))
+		return c.JSON(User{Username: user.Username, ID: user.ID})
 
 	})
 
@@ -151,5 +160,64 @@ func main() {
 
 	})
 
-	app.Listen(":3000")
+	app.Get("/user/:username", func(c *fiber.Ctx) error {
+		var user User
+		result := db.First(&user, "username = ?", c.Params("username"))
+		if result.RowsAffected == 0 {
+			c.Status(404)
+			return c.JSON("[ERROR] couldn't find user.")
+		} else {
+			c.Status(200)
+			return c.JSON(user)
+		}
+	})
+
+	app.Get("/logout", func(c *fiber.Ctx) error {
+		sess, _ := store.Get(c)
+		sess.Destroy()
+		return c.SendStatus(200)
+	})
+
+	app.Patch("/settings", func(c *fiber.Ctx) error {
+		var updated_user User
+		err := json.Unmarshal(c.Body(), &updated_user)
+		if err != nil {
+			fmt.Println(err)
+			c.SendString("[ERROR] Unkown error.")
+			return c.SendStatus(400)
+		}
+		if updated_user.Username != "" {
+			var temp_user User
+			// ideally you should check the email address as well (can't be bothered right now)
+			if db.Find(&temp_user, "username = ?", updated_user.Username).RowsAffected > 0 {
+				c.Status(400)
+				return c.SendString("[ERRROR] username taken.")
+			}
+		}
+
+		var user User
+
+		result := db.Find(&user, "id = ?", updated_user.ID)
+		if result.RowsAffected == 0 {
+			c.Status(500)
+			return c.SendString("[ERROR] user does not exist.")
+		}
+
+		r := db.Model(&user).Updates(User{
+			Username:      updated_user.Username,
+			Address:       updated_user.Address,
+			Phone_number:  updated_user.Phone_number,
+			Date_of_birth: updated_user.Date_of_birth,
+			Email_address: updated_user.Email_address,
+		})
+
+		if r.RowsAffected == 0 {
+			c.Status(500)
+			return c.SendString("[ERROR] unkown error")
+		} else {
+			c.Status(200)
+			return c.SendString("Success.")
+		}
+	})
+	app.Listen(":8000")
 }

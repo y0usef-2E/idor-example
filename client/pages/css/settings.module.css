@@ -1,0 +1,39 @@
+#display_data {
+  display: grid;
+  grid-template-areas: "label input value";
+  grid-template-columns: 10rem 20rem;
+}
+
+.value {
+  grid-column: value;
+  margin-left: 3rem;
+  max-width: 20rem;
+}
+.label {
+  grid-column: label;
+}
+
+.input {
+  grid-column: input;
+  width: 15rem;
+  height: 1.25rem;
+}
+
+.input,
+.label,
+.value {
+  margin-bottom: 2rem;
+}
+
+#submit_button {
+  grid-column: input;
+  max-width: 6rem;
+  height: 2rem;
+}
+
+.wrapper {
+  margin: 1rem;
+}
+.wrapper > p {
+  margin-top: 4rem;
+}
