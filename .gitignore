@@ -1,2 +1,3 @@
 local_scripts
 test.db
+.env

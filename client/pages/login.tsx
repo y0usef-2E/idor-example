@@ -1,7 +1,7 @@
 import styles from "./css/form.module.css";
 import { postData } from "./utils";
 
-const url: string = "http://localhost:8000/login";
+const url: string = process.env.NEXT_PUBLIC_API_URL + "/login";
 
 const handleSubmit = async (event) => {
   event.preventDefault();

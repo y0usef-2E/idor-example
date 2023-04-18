@@ -1,5 +1,5 @@
 export default function logout() {
-  fetch("http://localhost:8000/logout", { credentials: "include" })
+  fetch(process.env.NEXT_PUBLIC_API_URL + "/logout", { credentials: "include" })
     .then((res) => res)
     .then(() => window.location.replace("/"));
 }

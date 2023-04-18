@@ -18,7 +18,7 @@ let input_types = {
   address: "text",
   date_of_birth: "date",
 };
-const url = "http://localhost:8000/settings";
+const url = process.env.NEXT_PUBLIC_API_URL + "/settings";
 
 const handleSubmit = async (event, user_id) => {
   event.preventDefault();
@@ -61,7 +61,7 @@ export default function Settings() {
 
   useEffect(() => {
     if (username != undefined) {
-      fetch(`http://localhost:8000/user/${username}`)
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/${username}`)
         .then((res) => res.json())
         .then((data: user_data) => {
           setData(data);

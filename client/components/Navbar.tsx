@@ -2,34 +2,24 @@ import Link from "next/link";
 import styles from "./Navbar.module.css";
 import { useEffect, useState } from "react";
 
-// function WelcomeMsg() {
-//   if (isLoading) return <p>Loading...</p>;
-//   if (!data) return <p></p>;
-
-//   return <div>Welcome back, {data.username}!</div>;
-// }
-
 export default function Navbar() {
   const [username, setUsername] = useState(null);
-  const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
-    setLoading(true);
-    fetch("http://localhost:8000/me", { credentials: "include" })
+    fetch(process.env.NEXT_PUBLIC_API_URL + "/me", { credentials: "include" })
       .then((res) => res.json())
       .then((data: user_data) => {
         setUsername(data.username);
-        setLoading(false);
       });
   }, []);
 
   let Body = (
     <>
       <div className={styles.nav_item}>
-        <Link href="/register">register</Link>
+        <Link href="/register">Register</Link>
       </div>
       <div className={styles.nav_item}>
-        <Link href="/login">login</Link>
+        <Link href="/login">Login</Link>
       </div>
     </>
   );
@@ -38,10 +28,10 @@ export default function Navbar() {
     Body = (
       <>
         <div className={styles.nav_item}>
-          <Link href={"/logout"}>logout</Link>
+          <Link href={"/logout"}>Logout</Link>
         </div>
         <div className={styles.nav_item}>
-          <Link href={`/settings?username=${username}`}>settings</Link>
+          <Link href={`/settings?username=${username}`}>Settings</Link>
         </div>
       </>
     );
@@ -49,6 +39,9 @@ export default function Navbar() {
   return (
     <div id={styles.navbar}>
       {Body}
+      <div className={styles.nav_item}>
+        <Link href="https://github.com/y0usef-2E/idor-example">GitHub</Link>
+      </div>
       <div className={styles.nav_item} id={styles.home}>
         <Link href="/">Home</Link>
       </div>

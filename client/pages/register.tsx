@@ -1,6 +1,6 @@
 import { postData } from "./utils";
 import styles from "./css/form.module.css";
-const url: string = "http://localhost:8000/register";
+const url: string = process.env.NEXT_PUBLIC_API_URL + "/register";
 
 const handleSubmit = async (event) => {
   event.preventDefault();

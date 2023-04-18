@@ -3,9 +3,11 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/joho/godotenv"
 
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/session"
@@ -27,6 +29,11 @@ type User struct {
 }
 
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		fmt.Println("Error loading .env file")
+	}
+
 	store := session.New(session.Config{Expiration: 3 * 24 * time.Hour})
 	p := &params{
 		memory:      64 * 1024,
@@ -44,13 +51,16 @@ func main() {
 	db.AutoMigrate(&User{})
 
 	app := fiber.New()
+
+	client_url := os.Getenv("CLIENT_URL")
+	fmt.Println(client_url)
+
 	app.Use(cors.New(cors.Config{
-		AllowOrigins:     "http://localhost:3000",
+		AllowOrigins:     client_url,
 		AllowHeaders:     "",
 		AllowCredentials: true,
 	}))
 
-	// login struct:
 	type Login struct {
 		Username string `json:"username"`
 		Password string `json:"password"`

@@ -7,7 +7,9 @@ function WelcomeMsg() {
 
   useEffect(() => {
     setLoading(true);
-    fetch("http://localhost:8000/me", { credentials: "include" })
+    fetch(process.env.NEXT_PUBLIC_API_URL + "/me", {
+      credentials: "include",
+    })
       .then((res) => res.json())
       .then((data: user_data) => {
         setData({ id: data.id, username: data.username });

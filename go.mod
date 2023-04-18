@@ -8,6 +8,8 @@ require (
 	gorm.io/gorm v1.24.6
 )
 
+require github.com/joho/godotenv v1.5.1
+
 require (
 	github.com/andybalholm/brotli v1.0.5 // indirect
 	github.com/google/uuid v1.3.0 // indirect
