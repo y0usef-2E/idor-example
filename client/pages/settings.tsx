@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import styles from "./css/settings.module.css";
 import Link from "next/link";
-import { patchData } from "./utils";
+import { patchData } from "../utils";
 
 let match_content = {
   Username: "username",

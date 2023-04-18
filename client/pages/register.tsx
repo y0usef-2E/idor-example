@@ -1,4 +1,4 @@
-import { postData } from "./utils";
+import { postData } from "../utils";
 import styles from "./css/form.module.css";
 const url: string = process.env.NEXT_PUBLIC_API_URL + "/register";
 

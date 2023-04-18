@@ -1,5 +1,5 @@
 import styles from "./css/form.module.css";
-import { postData } from "./utils";
+import { postData } from "../utils";
 
 const url: string = process.env.NEXT_PUBLIC_API_URL + "/login";
 
