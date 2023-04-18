@@ -11,8 +11,5 @@ RUN apt-get install --yes --quiet  --no-install-recommends \
 
 RUN go build -o ./idor-example-api  
 
-RUN rm test.db 
-RUN rm -rd client 
-RUN rm -rd local_scripts
-
+EXPOSE 8000
 CMD ./idor-example-api
