@@ -34,7 +34,7 @@ func main() {
 		fmt.Println("Error loading .env file")
 	}
 
-	store := session.New(session.Config{Expiration: 3 * 24 * time.Hour})
+	store := session.New(session.Config{Expiration: 3 * 24 * time.Hour, CookieSameSite: "None"})
 	p := &params{
 		memory:      64 * 1024,
 		iterations:  1,
