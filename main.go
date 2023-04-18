@@ -43,7 +43,7 @@ func main() {
 		keyLength:   32,
 	}
 
-	db, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
+	db, err := gorm.Open(sqlite.Open("main.db"), &gorm.Config{})
 	if err != nil {
 		panic("[ERROR] Couldn't establish connection with DB.")
 	}
