@@ -6,7 +6,7 @@ Website to showcase a simple IDOR vulnerability.
 If you simply want to try it out, use this [public link](https://idor-example.vercel.app/).
 You should also be able to clone the repo and play around with it locally.
 
-You can find the **vulnerable page**  at <url>/settings?username={username}.
+You can find the **vulnerable page**  at {URL}/settings?username={username}.
 
 The **main idea** is very simple: since the settings page shows the current data of the selected user,
 you can view someone else's **private data** by changing the parameter *username* in the URL.
@@ -20,7 +20,7 @@ This is not a bad thing per se, but you need to keep it in mind should you try t
 
 Generally speaking, when designing a website, you should use the best database for your needs.
 For this website, I knew that I have many choices since I am dealing with a low amount of data,
-so I chose [*sqlite*](https://www.sqlite.org) as it is very easy to set up.
+so I chose [*SQLite*](https://www.sqlite.org) as it is very easy to set up.
 
 As it is a simple website aimed at showing **non-technical users** the aforementioned type of vulnerability,
 it uses usernames as unique identifiers instead of numerical IDs.
@@ -35,6 +35,10 @@ but also a part of your project that should be heavily tested.
 So be careful and don't blindly copy the way I (or others) do authentication,
 especially because I willingly make some spots less secure
 (either to be done quickly or to achieve the goal of this project, namely being vulnerable by design.)
+
+As for error messages, I would ideally always format them as a JSON object, 
+but it didn't make a difference in this case so I used strings instead. 
+This is something to keep in mind if you want to interact with the API.
 
 ### Deployment
 Client and server are deployed separately: the client on Vercel, the server on a VPS (using Dokku.)
